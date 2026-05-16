@@ -1,0 +1,30 @@
+# CloudPress WordPress Worker 배포 설정
+# PHP_RUNNER Service Binding으로 즉시 WordPress 실행
+# 데이터베이스: GitHub 레포 내 _db/wordpress.db (SQLite)
+name               = "cp-67d0de7f-wp"
+main               = "worker.js"
+compatibility_date = "2025-04-01"
+compatibility_flags = ["nodejs_compat"]
+
+[limits]
+cpu_ms = 50000
+
+# ── 캐시 (KV) ────────────────────────────────────────────────────────────────
+[[kv_namespaces]]
+binding = "CACHE"
+id      = "7399b50d877345d2adcb68db5d956a5f"
+
+# ── PHP_RUNNER Service Binding ────────────────────────────────────────────────
+# php-runner Worker를 Service Binding으로 연결 (즉시 WP 실행)
+[[services]]
+binding = "PHP_RUNNER"
+service = "cp-67d0de7f-wp-php"
+
+# ── 환경변수 ─────────────────────────────────────────────────────────────────
+[vars]
+SITE_ID      = "67d0de7f-e9a8-45d1-a450-0fd32bd3e311"
+GH_OWNER     = "choichoi3227-crypto"
+GH_REPO      = "cp-67d0de7f-site-67d0de7f"
+GH_PAGES_URL = "https://choichoi3227-crypto.github.io/cp-67d0de7f-site-67d0de7f"
+
+# GITHUB_TOKEN은 secret으로 설정 (wrangler secret put GITHUB_TOKEN)
